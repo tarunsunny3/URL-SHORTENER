@@ -1,1 +1,1 @@
-web: ./heroku-postbuild && ./main
+web: ./bin/go-url-shortener
