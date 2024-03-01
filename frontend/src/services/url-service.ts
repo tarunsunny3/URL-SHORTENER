@@ -6,7 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 class UrlService {
     async createShortURL(longUrl: string, userId: string) {
       const response = await axios
-            .post(API_URL + "short-urls", {
+            .post(API_URL + "/short-urls", {
                 "long_url": longUrl,
                 "user_id": userId
             });

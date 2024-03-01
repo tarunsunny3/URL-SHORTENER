@@ -1,12 +1,12 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = process.env.REACT_APP_API_URL + "/auth/";
+const API_URL = process.env.REACT_APP_API_URL + "/auth";
 
 class AuthService {
   async login(email: string, password: string) {
     const response = await axios
-      .post(API_URL + "login", {
+      .post(API_URL + "/login", {
         email,
         password
       });
@@ -18,7 +18,7 @@ class AuthService {
 
   async logout() {
     await axios.get(
-      API_URL + "logout",
+      API_URL + "/logout",
       { headers: authHeader() }
     );
     alert("Logout success removed local storage");
@@ -27,7 +27,7 @@ class AuthService {
   }
 
   async register(name: string, email: string, password: string) {
-    return await axios.post(API_URL + "register", {
+    return await axios.post(API_URL + "/register", {
       name,
       email,
       password
