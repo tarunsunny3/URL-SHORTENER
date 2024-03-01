@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = "http://34.94.19.218/auth/";
+const API_URL = process.env.REACT_APP_API_URL + "/auth/";
 
 class AuthService {
   async login(email: string, password: string) {
