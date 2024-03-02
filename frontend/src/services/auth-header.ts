@@ -1,14 +1,21 @@
-export default function authHeader() {
+import { AxiosRequestHeaders } from "axios";
+
+export default function authHeader(): AxiosRequestHeaders {
   const userStr = localStorage.getItem("user");
   let user = null;
-  if (userStr)
+  
+  if (userStr) {
     user = JSON.parse(userStr);
+  }
 
   if (user && user.token) {
-    return { Authorization: 'Bearer ' + user.token }; // for Spring Boot back-end
-    // return { 'x-access-token': user.accessToken };       // for Node.js Express back-end
+    return {
+      'Authorization': 'Bearer ' + user.token,
+      'Content-Type': 'application/json',
+    }; 
   } else {
-    return { Authorization: '' }; // for Spring Boot back-end
-    // return { 'x-access-token': null }; // for Node Express back-end
+    return {
+      'Content-Type': 'application/json',
+    };
   }
 }

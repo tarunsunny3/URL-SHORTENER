@@ -4,18 +4,35 @@ import authHeader from "./auth-header";
 const API_URL = process.env.REACT_APP_API_URL + "/auth";
 
 class AuthService {
+  // Register
+  async register(name: string, email: string, password: string) {
+    return await axios.post(API_URL + "/register", {
+      name,
+      email,
+      password
+    },{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+  // Login
   async login(email: string, password: string) {
     const response = await axios
       .post(API_URL + "/login", {
         email,
         password
+      },{
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
     if (response.data.token) {
       localStorage.setItem("user", JSON.stringify(response.data));
     }
     return response.data;
   }
-
+  // Logout
   async logout() {
     await axios.get(
       API_URL + "/logout",
@@ -26,13 +43,7 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
-  async register(name: string, email: string, password: string) {
-    return await axios.post(API_URL + "/register", {
-      name,
-      email,
-      password
-    });
-  }
+  
 
   getCurrentUser() {
     const userStr = localStorage.getItem("user");
