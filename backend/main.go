@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tarunsunny3/go-url-shortener/controllers"
 	"github.com/tarunsunny3/go-url-shortener/initializers"
-	"github.com/tarunsunny3/go-url-shortener/models"
 	"github.com/tarunsunny3/go-url-shortener/myconfig"
 	"github.com/tarunsunny3/go-url-shortener/routes"
 	"github.com/tarunsunny3/go-url-shortener/store"
@@ -33,9 +32,9 @@ func init() {
 
 	initializers.ConnectDB(&config)
 
-	initializers.DB.AutoMigrate(&models.User{}, &models.URL{}, &models.ClickAnalytics{})
+	// initializers.DB.AutoMigrate(&models.User{}, &models.URL{}, &models.ClickAnalytics{})
 
-	log.Println("Database Migration Done!!!")
+	// log.Println("Database Migration Done!!!")
 	AuthController = controllers.NewAuthController(initializers.DB)
 	AuthRouteController = routes.NewAuthRouteController(AuthController)
 
@@ -50,7 +49,7 @@ func main() {
 	store.InitializeStore()
 	// router.RegisterRoutes(server)
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"https://url-shortener-gamma-lilac.vercel.app"}
+	corsConfig.AllowOrigins = []string{"http://localhost:8081", "https://url-shortener-gamma-lilac.vercel.app"}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	corsConfig.AllowCredentials = true
 	corsConfig.AllowHeaders = []string{"Content-Type", "Authorization"}

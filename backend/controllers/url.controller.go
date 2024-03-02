@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -57,10 +59,34 @@ type UrlCreationRequest struct {
 	UserId  string `json:"user_id"`
 }
 
+func isValidURL(input string) bool {
+	// Check if the string starts with "http" or "https"
+	if !strings.HasPrefix(input, "http://") && !strings.HasPrefix(input, "https://") {
+		return false
+	}
+
+	// Try parsing the URL
+	u, err := url.Parse(input)
+	if err != nil {
+		return false
+	}
+
+	// Check if the scheme is either "http" or "https"
+	if u.Scheme != "http" && u.Scheme != "https" {
+		return false
+	}
+
+	return true
+}
+
 func (uc *UrlController) CreateShortUrl(c *gin.Context) {
 	var creationRequest UrlCreationRequest
 	if err := c.ShouldBindJSON(&creationRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !isValidURL(creationRequest.LongUrl) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid URL!!!"})
 		return
 	}
 
@@ -81,6 +107,7 @@ func (uc *UrlController) CreateShortUrl(c *gin.Context) {
 			"short_url": shortUrlPath,
 		})
 	} else {
+		log.Fatal(urlResponse.ErrorMessage)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":     "failed to create short URL",
 			"message":   urlResponse.ErrorMessage,
