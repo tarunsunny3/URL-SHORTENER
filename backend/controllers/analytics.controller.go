@@ -3,8 +3,10 @@
 package controllers
 
 import (
+	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/tarunsunny3/go-url-shortener/models"
 	"gorm.io/gorm"
 )
@@ -33,4 +35,47 @@ func (cac *ClickAnalyticsController) InsertNewAnalytics(urlID uint, userID uint6
 	}
 
 	return nil
+}
+
+// GetAnalyticsForURL fetches analytics data for a specific URL
+func (cac *ClickAnalyticsController) FetchAnalyticsForURL(urlID string) (map[string]interface{}, error) {
+	// var analyticsData []models.ClickAnalytics
+
+	// 1. Calculate the Number of clicks
+	var totalClicks int64
+	if err := cac.DB.Model(&models.ClickAnalytics{}).Where("url_id = ?", urlID).Count(&totalClicks).Error; err != nil {
+		return nil, err
+	}
+
+	// 2. Calculate the Most frequent referer
+	var mostFrequentReferer string
+	if err := cac.DB.Model(&models.ClickAnalytics{}).
+		Where("url_id = ?", urlID).
+		Group("referer").
+		Order("count(*) DESC").
+		Limit(1).
+		Pluck("referer", &mostFrequentReferer).
+		Error; err != nil {
+		return nil, err
+	}
+	// Prepare the result as a map
+	result := map[string]interface{}{
+		"totalClicks":         totalClicks,
+		"mostFrequentReferer": mostFrequentReferer,
+	}
+
+	return result, nil
+}
+
+func (uc *ClickAnalyticsController) GetAnalyticsForURL(c *gin.Context) {
+
+	urlId := c.Param("urlid")
+	analytics, err := uc.FetchAnalyticsForURL(urlId)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	c.JSON(http.StatusOK, gin.H{"analytics": analytics})
+
 }

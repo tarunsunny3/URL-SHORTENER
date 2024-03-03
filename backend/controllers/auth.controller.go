@@ -121,6 +121,8 @@ func (ac *AuthController) LogoutUser(ctx *gin.Context) {
 		domain = "localhost"
 		secure = false
 	}
+	ctx.Set("currentUser", nil)
 	ctx.SetCookie("token", "", -1, "/", domain, secure, true)
+	// log.Print("Cookie unset and current user unset!!")
 	ctx.JSON(http.StatusOK, gin.H{"status": "successfully logged out"})
 }

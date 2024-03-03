@@ -9,8 +9,9 @@ import IUser from './types/user.type';
 import Login from "./components/LoginComponent/login.component";
 import Register from "./components/RegisterComponent/register.component";
 import Home from "./components/HomeComponent/home.component";
-
-import EventBus from "./common/EventBus";
+import UserDashboard from "./components/UserDashboard/userdashboard.component";
+import UrlAnalytics from "./components/UrlAnalyticsComponent/urlAnalytics.component"
+import ProtectedRoute from "./components/ProtectedRoute";
 
 type Props = {};
 
@@ -36,27 +37,22 @@ class App extends Component<Props, State> {
         currentUser: user,
       });
     }
-
-    EventBus.on("logout", this.logOut);
   }
 
-  componentWillUnmount() {
-    EventBus.remove("logout", this.logOut);
-  }
 
-  logOut() {
-    alert("logout")
-    this.setState({
-      currentUser: undefined,
-    });
-    AuthService.logout().then(() => {
+  async logOut() {
+    try {
+      await AuthService.logout()
       this.setState({
         currentUser: undefined,
       });
-      alert(this.state.currentUser)
-    }).catch((e)=>{
-      alert("Some error in logout " + e.toString())
-    })
+
+    } catch (error) {
+      this.setState({
+        currentUser: undefined,
+      });
+    }
+
   }
 
   render() {
@@ -68,25 +64,25 @@ class App extends Component<Props, State> {
           <Link to={"/"} className="navbar-brand">
             miniURL
           </Link>
-          <div className="navbar-nav mr-auto">
+          {/* <div className="navbar-nav mr-auto">
             <li className="nav-item">
               <Link to={"/home"} className="nav-link">
                 Home
               </Link>
             </li>
-          </div>
+          </div> */}
 
           {currentUser ? (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
-                  {currentUser.name}
+                <Link to={"/dashboard"} className="nav-link">
+                  Dashboard
                 </Link>
               </li>
               <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={this.logOut}>
+                <button className="nav-link" onClick={this.logOut}>
                   LogOut
-                </a>
+                </button>
               </li>
             </div>
           ) : (
@@ -108,11 +104,28 @@ class App extends Component<Props, State> {
 
         <div className="container mt-3">
           <Routes>
-            
+
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route
+              path="/dashboard"
+              element={
+
+                <ProtectedRoute>
+                  <UserDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute>
+                  <UrlAnalytics />
+                </ProtectedRoute>
+              }
+            />
 
           </Routes>
         </div>

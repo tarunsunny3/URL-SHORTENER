@@ -34,16 +34,23 @@ class AuthService {
   }
   // Logout
   async logout() {
-    await axios.get(
-      API_URL + "/logout",
-      { headers: authHeader() }
-    );
-    alert("Logout success removed local storage");
-    console.log("Logout success removed local storage");
-    localStorage.removeItem("user");
+    try {
+      const res = await axios.get(API_URL + "/logout", { headers: authHeader() });
+      console.log("Logout success removed local storage");
+      localStorage.removeItem("user");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   }
 
-  
+  isAuthenticated() {
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      return user.token && user.token.trim() !== "";
+    }
+    return false;
+  }
 
   getCurrentUser() {
     const userStr = localStorage.getItem("user");

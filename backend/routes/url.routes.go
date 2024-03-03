@@ -9,7 +9,7 @@ type UrlRouteController struct {
 	userController controllers.UrlController
 }
 
-func NewRouteUserController(userController controllers.UrlController) UrlRouteController {
+func NewUrlRouteController(userController controllers.UrlController) UrlRouteController {
 	return UrlRouteController{userController}
 }
 

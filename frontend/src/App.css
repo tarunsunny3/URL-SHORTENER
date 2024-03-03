@@ -45,7 +45,22 @@ label {
 
 
 .navbar{
-  background-color: whitesmoke !important;
+  background-color: inherit !important;
+}
+.navbar .navbar-brand {
+  /* background: #000; */
+  color: white;
+  font-size:300%;
+  font-weight: bolder;
+  /* border: dotted black 2%; */
+  /* padding: 1%; */
+}
+.nav-item {
+  background: rgb(44, 15, 15) !important;
+  
+}
+.nav-item a {
+  color: white !important;
 }
 
 .btn-spl {

@@ -22,6 +22,12 @@ var (
 
 	UrlController      controllers.UrlController
 	UrlRouteController routes.UrlRouteController
+
+	UserController      controllers.UserController
+	UserRouteController routes.UserRouteController
+
+	ClickAnalyticsController      controllers.ClickAnalyticsController
+	ClickAnalyticsRouteController routes.ClickAnalyticsRouteController
 )
 
 func init() {
@@ -39,7 +45,13 @@ func init() {
 	AuthRouteController = routes.NewAuthRouteController(AuthController)
 
 	UrlController = controllers.NewUrlController(initializers.DB)
-	UrlRouteController = routes.NewRouteUserController(UrlController)
+	UrlRouteController = routes.NewUrlRouteController(UrlController)
+
+	UserController = controllers.NewUserController(initializers.DB)
+	UserRouteController = routes.NewUserRouteController(UserController)
+
+	ClickAnalyticsController = controllers.NewClickAnalyticsController(initializers.DB)
+	ClickAnalyticsRouteController = routes.NewAnalyticsRouteController(ClickAnalyticsController)
 
 	server = gin.Default()
 }
@@ -58,6 +70,8 @@ func main() {
 
 	AuthRouteController.AuthRoute(&server.RouterGroup)
 	UrlRouteController.UrlRoute(&server.RouterGroup)
+	UserRouteController.UserRoute(&server.RouterGroup)
+	ClickAnalyticsRouteController.ClickAnalyticsRoute(&server.RouterGroup)
 
 	port := myconfig.GetPort()
 	fmt.Printf("Running on port %v\n", port)

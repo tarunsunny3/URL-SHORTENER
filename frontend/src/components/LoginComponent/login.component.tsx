@@ -45,7 +45,7 @@ const Login = () => {
       () => {
         setState((prevState) => ({
           ...prevState,
-          redirect: "/",
+          redirect: "/dashboard",
         }));
       },
       (error) => {
