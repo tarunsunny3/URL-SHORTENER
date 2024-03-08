@@ -3,13 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/tarunsunny3/go-url-shortener/controllers"
 	"github.com/tarunsunny3/go-url-shortener/initializers"
-	"github.com/tarunsunny3/go-url-shortener/models"
 	"github.com/tarunsunny3/go-url-shortener/myconfig"
 	"github.com/tarunsunny3/go-url-shortener/routes"
 	"github.com/tarunsunny3/go-url-shortener/store"
@@ -35,18 +33,16 @@ var (
 func init() {
 	config, err := initializers.LoadConfig(".")
 	log.Print("Config is ", config)
-	log.Print("OS env is ", os.Getenv("POSTGRES_CONNECTION_STRING"))
-	// log.Print("OS env is ", os.Getenv("HEROKU_EXAMPLE"))
 
 	if err != nil {
 		log.Fatal("? Could not load environment variables", err)
 	}
 
-	initializers.ConnectDB(&config)
+	// initializers.ConnectDB(&config)
 
-	initializers.DB.AutoMigrate(&models.User{}, &models.URL{}, &models.ClickAnalytics{})
+	// initializers.DB.AutoMigrate(&models.User{}, &models.URL{}, &models.ClickAnalytics{})
 
-	log.Println("Database Migration Done!!!")
+	// log.Println("Database Migration Done!!!")
 	AuthController = controllers.NewAuthController(initializers.DB)
 	AuthRouteController = routes.NewAuthRouteController(AuthController)
 
