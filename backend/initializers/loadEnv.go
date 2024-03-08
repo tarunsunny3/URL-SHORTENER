@@ -23,6 +23,7 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.SetConfigName("app.env")
 
 	viper.AutomaticEnv()
+	viper.SetEnvPrefix("HEROKU")
 
 	err = viper.ReadInConfig()
 	if err != nil {
