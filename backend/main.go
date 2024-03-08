@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -33,6 +34,10 @@ var (
 
 func init() {
 	config, err := initializers.LoadConfig(".")
+	log.Print("Config is ", config)
+	// log.Print("OS env is ", os.Getenv("HEROKU_POSTGRES_CONNECTION_STRING"))
+	log.Print("OS env is ", os.Getenv("HEROKU_EXAMPLE"))
+
 	if err != nil {
 		log.Fatal("? Could not load environment variables", err)
 	}
