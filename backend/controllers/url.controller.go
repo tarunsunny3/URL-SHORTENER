@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -51,6 +50,15 @@ func (uc *UrlController) InsertURL(originalURL, shortURL string, userID uint64, 
 	}
 
 	return urlResponse
+}
+func getDeviceType(userAgent string) string {
+	userAgent = strings.ToLower(userAgent)
+	if strings.Contains(userAgent, "mobile") {
+		return "Mobile"
+	}
+
+	return "Desktop"
+
 }
 
 // Request model definition
@@ -119,7 +127,7 @@ func (uc *UrlController) CreateShortUrl(c *gin.Context) {
 func (uc *UrlController) HandleShortUrlRedirect(c *gin.Context) {
 	shortUrl := c.Param("shortUrl")
 	userAgent := c.GetHeader("User-Agent")
-	fmt.Print("User-Agent is " + userAgent)
+	deviceType := getDeviceType(userAgent)
 	originalURL, err := store.RetrieveInitialUrl(shortUrl)
 	if err == nil {
 		// Key not found
@@ -131,7 +139,7 @@ func (uc *UrlController) HandleShortUrlRedirect(c *gin.Context) {
 			go func() {
 				// Create ClickAnalytics record
 				clickAnalyticsController := NewClickAnalyticsController(uc.DB)
-				if err := clickAnalyticsController.InsertNewAnalytics(urlModel.ID, urlModel.UserID, c.ClientIP(), c.GetHeader("Referer")); err != nil {
+				if err := clickAnalyticsController.InsertNewAnalytics(urlModel.ID, urlModel.UserID, c.ClientIP(), c.GetHeader("Referer"), deviceType); err != nil {
 					log.Printf("Failed to insert ClickAnalytics: %v", err)
 					// Handle error as needed
 				}

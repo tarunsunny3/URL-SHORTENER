@@ -13,7 +13,7 @@ var DB *gorm.DB
 
 func ConnectDB(config *Config) {
 	var err error
-	connStr := "postgres://gejwavxy:ZqYamxs-OlCIHvEfDTObQfwx7Dn7ggkO@bubble.db.elephantsql.com/gejwavxy"
+	connStr := config.PostgreSQLConnString
 	// connStr := "postgresql://tarunsunny3:CxPMGIy0nv7D@ep-ancient-bird-a5fu6cfu.us-east-2.aws.neon.tech/my-postgres?sslmode=require"
 	for i := 0; i < 10; i++ {
 		DB, err = gorm.Open(postgres.Open(connStr), &gorm.Config{})

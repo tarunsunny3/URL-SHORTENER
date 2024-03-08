@@ -20,13 +20,14 @@ func NewClickAnalyticsController(DB *gorm.DB) ClickAnalyticsController {
 }
 
 // InsertNewAnalytics creates and inserts a new analytics entry into the database
-func (cac *ClickAnalyticsController) InsertNewAnalytics(urlID uint, userID uint64, ipAddress, referer string) error {
+func (cac *ClickAnalyticsController) InsertNewAnalytics(urlID uint, userID uint64, ipAddress, referer string, deviceType string) error {
 	analyticsEntry := models.ClickAnalytics{
-		URLID:     urlID,
-		UserID:    userID,
-		Timestamp: time.Now(),
-		IPAddress: ipAddress,
-		Referer:   referer,
+		URLID:      urlID,
+		UserID:     userID,
+		Timestamp:  time.Now(),
+		IPAddress:  ipAddress,
+		Referer:    referer,
+		DeviceType: deviceType,
 		// Add other analytics-related fields as needed
 	}
 

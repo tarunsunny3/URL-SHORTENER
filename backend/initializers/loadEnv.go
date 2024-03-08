@@ -7,14 +7,10 @@ import (
 )
 
 type Config struct {
-	DBHost         string `mapstructure:"POSTGRES_HOST"`
-	DBUserName     string `mapstructure:"POSTGRES_USER"`
-	DBUserPassword string `mapstructure:"POSTGRES_PASSWORD"`
-	DBName         string `mapstructure:"POSTGRES_DB"`
-	DBPort         string `mapstructure:"POSTGRES_PORT"`
-	ServerPort     string `mapstructure:"PORT"`
-
-	ClientOrigin string `mapstructure:"CLIENT_ORIGIN"`
+	PostgreSQLConnString string `mapstructure:"POSTGRES_CONNECTION_STRING"`
+	RedisConnAddr        string `mapstructure:"REDIS_CONNECTION_ADDR"`
+	RedisConnPassword    string `mapstructure:"REDIS_CONNECTION_PASSWORD"`
+	ClientOrigin         string `mapstructure:"CLIENT_ORIGIN"`
 
 	TokenSecret    string        `mapstructure:"TOKEN_SECRET"`
 	TokenExpiresIn time.Duration `mapstructure:"TOKEN_EXPIRED_IN"`
