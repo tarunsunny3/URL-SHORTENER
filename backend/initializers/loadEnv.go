@@ -19,11 +19,9 @@ type Config struct {
 
 func LoadConfig(path string) (config Config, err error) {
 	viper.AutomaticEnv()
-	viper.AddConfigPath(path)
-	viper.SetConfigType("env")
-	viper.SetConfigName("app.env")
-	viper.SetEnvPrefix("HEROKU")
-	viper.SetEnvPrefix("HEROKU_")
+	// viper.AddConfigPath(path)
+	// viper.SetConfigType("env")
+	// viper.SetConfigName("app.env")
 
 	err = viper.ReadInConfig()
 	if err != nil {
