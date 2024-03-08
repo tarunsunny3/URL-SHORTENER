@@ -35,8 +35,9 @@ var (
 func init() {
 	config, err := initializers.LoadConfig(".")
 	log.Print("Config is ", config)
-	// log.Print("OS env is ", os.Getenv("HEROKU_POSTGRES_CONNECTION_STRING"))
-	log.Print("OS env is ", os.Getenv("HEROKU_EXAMPLE"))
+	log.Print("OS env with PREFIX is ", os.Getenv("HEROKU_POSTGRES_CONNECTION_STRING"))
+	log.Print("OS env is ", os.Getenv("POSTGRES_CONNECTION_STRING"))
+	// log.Print("OS env is ", os.Getenv("HEROKU_EXAMPLE"))
 
 	if err != nil {
 		log.Fatal("? Could not load environment variables", err)
