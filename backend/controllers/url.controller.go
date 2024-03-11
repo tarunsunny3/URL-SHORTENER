@@ -56,9 +56,7 @@ func getDeviceType(userAgent string) string {
 	if strings.Contains(userAgent, "mobile") {
 		return "Mobile"
 	}
-
 	return "Desktop"
-
 }
 
 // Request model definition

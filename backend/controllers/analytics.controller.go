@@ -28,7 +28,6 @@ func (cac *ClickAnalyticsController) InsertNewAnalytics(urlID uint, userID uint6
 		IPAddress:  ipAddress,
 		Referer:    referer,
 		DeviceType: deviceType,
-		// Add other analytics-related fields as needed
 	}
 
 	if err := cac.DB.Create(&analyticsEntry).Error; err != nil {
@@ -59,10 +58,26 @@ func (cac *ClickAnalyticsController) FetchAnalyticsForURL(urlID string) (map[str
 		Error; err != nil {
 		return nil, err
 	}
+
+	// 3. Calculate total number of clicks that came from a Laptop or Mobile phone
+
+	var totalMobilePhoneClicks int64
+	var totalDesktopClicks int64
+
+	if err := cac.DB.Model(&models.ClickAnalytics{}).Where("url_id = ? AND device_type = ?", urlID, "Mobile").Count(&totalMobilePhoneClicks).Error; err != nil {
+		return nil, err
+	}
+	if err := cac.DB.Model(&models.ClickAnalytics{}).Where("url_id = ? AND device_type = ?", urlID, "Desktop").Count(&totalDesktopClicks).Error; err != nil {
+		return nil, err
+	}
+	// 4. Top 5 locations from where the clicks happpened
+
 	// Prepare the result as a map
 	result := map[string]interface{}{
 		"totalClicks":         totalClicks,
 		"mostFrequentReferer": mostFrequentReferer,
+		"mobilePhoneClicks":   totalMobilePhoneClicks,
+		"desktopClicks":       totalDesktopClicks,
 	}
 
 	return result, nil

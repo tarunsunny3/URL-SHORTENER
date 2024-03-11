@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom'; // Ensure you have the correct import
 import AnalyticsService from '../../services/analytics-service'; // Update with the correct path
+import PieChart from '../../common/Piechart/PieChart';
 
 interface UrlData {
   ID: number;
@@ -12,6 +13,8 @@ interface UrlData {
 interface AnalyticsData {
   totalClicks: number;
   mostFrequentReferer: string;
+  mobilePhoneClicks: number;
+  desktopClicks: number;
 }
 
 const UrlAnalytics = () => {
@@ -35,7 +38,7 @@ const UrlAnalytics = () => {
     };
 
     fetchAnalyticsData();
-  }, [urlData.ID]);
+  }, []);
 
   return (
     <div className='card'>
@@ -44,6 +47,15 @@ const UrlAnalytics = () => {
         <div>
           <p>Total Clicks: {analyticsData.totalClicks}</p>
           <p>Unique Visitors: {analyticsData.mostFrequentReferer}</p>
+          {analyticsData.mobilePhoneClicks && analyticsData.desktopClicks && (
+            <div style={{width: "40%", height: "30%"}}>
+               <PieChart
+            totalMobileClicks={analyticsData.mobilePhoneClicks}
+            totalDesktopClicks={analyticsData.desktopClicks}
+          />
+            </div>
+         
+      )}
         </div>
       ) : (
         <p>Loading analytics data...</p>
