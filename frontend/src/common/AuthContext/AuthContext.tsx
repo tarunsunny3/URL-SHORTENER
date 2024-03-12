@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 
 interface AuthContextProps {
   currentUser: IUser | undefined;
-  checkCurrentUser: () => string | undefined;
+  checkCurrentUser: () => IUser | undefined;
   logout: () => void;
   login: (email: string, password: string) => Promise<void>;
   checkTokenValidity: () => {"active": boolean, "message": string};

@@ -63,9 +63,7 @@ const UserDashboard = () => {
   const [message, setMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [isTokenValid, setIsTokenValid] = useState(true);
-
-  const {currentUser, checkCurrentUser, checkTokenValidity} = useAuth();
+  const {checkCurrentUser, checkTokenValidity} = useAuth();
  
   const navigate = useNavigate();
 
@@ -82,6 +80,7 @@ const UserDashboard = () => {
     if(!active){
       navigateToLoginPage(message)
     }
+    const currentUser = checkCurrentUser();
     try {
       setIsLoading(true);
       const response = await UserService.fetchAllURLs(currentUser?.ID);
@@ -98,6 +97,9 @@ const UserDashboard = () => {
     const shorturl = hostURL + "/" + shortURL;
     navigator.clipboard.writeText(shorturl);
     setMessage("Copied to clipboard successfully!!");
+    const timeoutId = setTimeout(() => {
+      setMessage("")
+    }, 3000);
   };
 
   const showAnalytics = (url: URL) => {
