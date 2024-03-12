@@ -43,7 +43,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
       setCurrentUser(response.data.user)
     } catch (error) {
-        alert("Login failed")
       console.error('Login failed:', error);
     }
   };

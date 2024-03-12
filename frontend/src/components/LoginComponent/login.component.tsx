@@ -24,7 +24,6 @@ const Login = () => {
   useEffect(() => {
     const currentUser = checkCurrentUser();
     if (currentUser) {
-      alert("Current user exists")
       navigate("/")
     }
   }, []);
