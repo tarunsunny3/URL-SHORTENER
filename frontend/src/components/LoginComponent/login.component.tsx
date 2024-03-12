@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import AuthService from "../../services/auth.service";
+import Alert from "../../common/Alert/Alert";
 
 const Login = () => {
+  const location = useLocation();
+
+  const navigate = useNavigate();
   const [state, setState] = useState({
     redirect: "",
     email: "",
@@ -12,20 +16,20 @@ const Login = () => {
     loading: false,
     message: "",
   });
+  const [alertMessage, setAlertMessage] = useState<string>("");
 
   useEffect(() => {
     const currentUser = AuthService.getCurrentUser();
 
     if (currentUser) {
-      setState({ ...state, redirect: "/" });
+      navigate("/")
     }
   }, []);
 
   useEffect(() => {
-    return () => {
-      window.location.reload();
-    };
-  }, []);
+    if(location.state && location.state.message)
+      setAlertMessage(location.state.message)
+  })
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("This field is required!"),
@@ -43,10 +47,7 @@ const Login = () => {
 
     AuthService.login(email, password).then(
       () => {
-        setState((prevState) => ({
-          ...prevState,
-          redirect: "/dashboard",
-        }));
+       navigate("/dashboard")
       },
       (error) => {
         const resMessage =
@@ -65,10 +66,7 @@ const Login = () => {
     );
   };
 
-  if (state.redirect) {
-    return <Navigate to={state.redirect} />;
-  }
-
+ 
   const { loading, message } = state;
 
   const initialValues = {
@@ -78,6 +76,10 @@ const Login = () => {
 
   return (
     <div className="col-md-12">
+      {
+        alertMessage.length > 0 && <Alert message={alertMessage} variant="danger"/>
+      }
+      
       <div className="card card-container">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"

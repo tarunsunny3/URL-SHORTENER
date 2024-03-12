@@ -20,7 +20,7 @@ const Alert: React.FC<AlertProps> = ({ message, variant }) => {
             {
                 show &&
 
-                <div style={{ width: "max-content" }} className={`alert alert-${variant} alert-dismissible fade show`} role="alert">
+                <div style={{ width: "max-content", position: 'fixed', bottom: 16, right: 16, zIndex: 1000 }} className={`alert alert-${variant} alert-dismissible fade show`} role="alert">
                     {message}
                     <button onClick={() => setShow(false)} type="button" className="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
