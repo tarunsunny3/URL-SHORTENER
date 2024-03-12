@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tarunsunny3/go-url-shortener/initializers"
 	"github.com/tarunsunny3/go-url-shortener/models"
+	"github.com/tarunsunny3/go-url-shortener/myconfig"
 	"gorm.io/gorm"
 )
 
@@ -52,6 +53,6 @@ func (uc *UserController) GetURLsForCurrentUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch URLs, " + err.Error()})
 		return
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{"urls": urls})
+	host := myconfig.GetHostURL()
+	ctx.JSON(http.StatusOK, gin.H{"urls": urls, "hostURL": host})
 }

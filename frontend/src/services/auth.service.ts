@@ -40,6 +40,7 @@ class AuthService {
       localStorage.removeItem("user");
     } catch (error) {
       console.error("Logout failed:", error);
+      localStorage.removeItem("user");
     }
   }
 

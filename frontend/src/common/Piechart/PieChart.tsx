@@ -1,5 +1,5 @@
 import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import { Doughnut, Pie } from 'react-chartjs-2';
 
 interface PieChartProps {
   totalMobileClicks: number;
@@ -18,7 +18,7 @@ const PieChart: React.FC<PieChartProps> = ({ totalMobileClicks, totalDesktopClic
     ],
   };
 
-  return <Doughnut data={data} />;
+  return <Pie data={data} />;
 };
 
 export default PieChart;

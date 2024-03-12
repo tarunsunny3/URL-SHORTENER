@@ -26,11 +26,10 @@ const UrlAnalytics = () => {
   useEffect(() => {
     const fetchAnalyticsData = async () => {
       try {
-        // console.log("Url data is ", urlData);
-        
+
         const response = await AnalyticsService.fetchUrlAnalytics(urlData.ID.toString());
         console.log(response.data.analytics);
-        
+
         setAnalyticsData(response.data.analytics);
       } catch (error) {
         console.error('Error fetching analytics data:', error);
@@ -43,23 +42,28 @@ const UrlAnalytics = () => {
   return (
     <div className='card'>
       <h4>Analytics for {urlData.OriginalURL.substring(0, 60)}</h4>
-     {analyticsData ? (
+      <hr/>
+      {analyticsData ? (
         <div>
-          <p>Total Clicks: {analyticsData.totalClicks}</p>
-          <p>Unique Visitors: {analyticsData.mostFrequentReferer}</p>
-          {analyticsData.mobilePhoneClicks && analyticsData.desktopClicks && (
-            <div style={{width: "40%", height: "30%"}}>
-               <PieChart
-            totalMobileClicks={analyticsData.mobilePhoneClicks}
-            totalDesktopClicks={analyticsData.desktopClicks}
-          />
+          <p>Total Clicks: <span className='text-dark'><strong>{analyticsData.totalClicks}</strong></span></p>
+          <hr/>
+                    
+          <p>Most Frequent Referer: {analyticsData.mostFrequentReferer.length > 0 ? analyticsData.mostFrequentReferer : <strong><span className='text-warning'>Not enough data to obtain this metric!!</span></strong>}</p>
+          <hr/>
+          {analyticsData.totalClicks > 0 && analyticsData.mobilePhoneClicks >= 0 && analyticsData.desktopClicks >= 0 && (
+            <div style={{ width: "40%", height: "30%" }}>
+              <h4>Mobile vs Desktop Clicks</h4>
+              <PieChart
+                totalMobileClicks={analyticsData.mobilePhoneClicks}
+                totalDesktopClicks={analyticsData.desktopClicks}
+              />
             </div>
-         
-      )}
+
+          )}
         </div>
       ) : (
         <p>Loading analytics data...</p>
-      )} 
+      )}
     </div>
   );
 };
