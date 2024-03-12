@@ -5,6 +5,7 @@ import UserService from "../../services/user-service";
 import { useNavigate } from 'react-router-dom';
 import styles from './userdashboard.module.css';
 import Alert from "../../common/Alert/Alert";
+import { useAuth } from "../../common/AuthContext/AuthContext";
 
 interface URL {
   OriginalURL: string;
@@ -64,7 +65,7 @@ const UserDashboard = () => {
 
   const [isTokenValid, setIsTokenValid] = useState(true);
 
-  
+  const {currentUser, checkCurrentUser, checkTokenValidity} = useAuth();
  
   const navigate = useNavigate();
 
@@ -77,20 +78,13 @@ const UserDashboard = () => {
   }, []);
 
   const fetchUserURLs = async () => {
-    const {active, message }  = AuthService.checkTokenValidity()
+    const {active, message }  = checkTokenValidity()
     if(!active){
       navigateToLoginPage(message)
     }
-    const currUser = AuthService.getCurrentUser();
-    if (!currUser) {
-      alert("User not logged in");
-      navigate("/login");
-      return;
-    }
-
     try {
       setIsLoading(true);
-      const response = await UserService.fetchAllURLs(currUser.user.ID);
+      const response = await UserService.fetchAllURLs(currentUser?.ID);
       setHostURL(response.data.hostURL);
       setUrls(response.data.urls);
       setIsLoading(false);

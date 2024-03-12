@@ -32,7 +32,7 @@ class AuthService {
     if (response.data.token) {
       localStorage.setItem("user", JSON.stringify(response.data));
     }
-    return response.data;
+    return response;
   }
   // Logout
   async logout() {
@@ -58,7 +58,7 @@ class AuthService {
 
   getCurrentUser() {
     const userStr = localStorage.getItem("user");
-    if (userStr) return JSON.parse(userStr);
+    if (userStr) return JSON.parse(userStr).user;
 
     return null;
   }

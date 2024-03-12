@@ -4,9 +4,12 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import AuthService from "../../services/auth.service";
 import Alert from "../../common/Alert/Alert";
+import { useAuth } from "../../common/AuthContext/AuthContext";
 
 const Login = () => {
   const location = useLocation();
+
+  const {checkCurrentUser, login} = useAuth()
 
   const navigate = useNavigate();
   const [state, setState] = useState({
@@ -19,9 +22,9 @@ const Login = () => {
   const [alertMessage, setAlertMessage] = useState<string>("");
 
   useEffect(() => {
-    const currentUser = AuthService.getCurrentUser();
-
+    const currentUser = checkCurrentUser();
     if (currentUser) {
+      alert("Current user exists")
       navigate("/")
     }
   }, []);
@@ -36,7 +39,7 @@ const Login = () => {
     password: Yup.string().required("This field is required!"),
   });
 
-  const handleLogin = (formValue: { email: any; password: any; }) => {
+  const handleLogin = async (formValue: { email: any; password: any; }) => {
     const { email, password } = formValue;
 
     setState((prevState) => ({
@@ -44,13 +47,11 @@ const Login = () => {
       message: "",
       loading: true,
     }));
-
-    AuthService.login(email, password).then(
-      () => {
-       navigate("/dashboard")
-      },
-      (error) => {
-        const resMessage =
+    try {
+      await login(email, password);
+      navigate("/dashboard")
+    } catch (error: any) {
+      const resMessage =
           (error.response &&
             error.response.data &&
             error.response.data.message) ||
@@ -62,8 +63,7 @@ const Login = () => {
           loading: false,
           message: resMessage,
         }));
-      }
-    );
+    }
   };
 
  
