@@ -19,7 +19,7 @@ URL shortener app made using:
    
     1.2. [Setup Redis Cloud Service](#get-redis-cloud-service-connection-details)
    
-2. [Why I couldn't deploy my Docker+ GCP Kubernetes?](#why-my-docker-gcp-kubernetes-deployment-failed)
+2. [Why couldn't I deploy my app using Docker + GCP Kubernetes?](#why-couldnti-deploy-my-app-using-docker--gcp-kubernetes-)
 
 ## How To Run it Locally
 
@@ -54,4 +54,9 @@ TOKEN_MAXAGE=180
 TOKEN_SECRET=my-ultra-secure-json-web-token-string
 ```
 
+### Why couldn't I deploy my app using Docker + GCP Kubernetes?
+GCP's GKE gave me an external IP exposing my backend service/APIs. But when I deployed my frontend app on Vercel which had a different
+
+domain like ****vercel.com and my backend external IP address didn't match with the frontend Vercel's domain and hence even though I used CORS on my backend go code
+Vercel blocked the API requests to my backend, and hence I had to deploy it on Heroku as a single app.
 
