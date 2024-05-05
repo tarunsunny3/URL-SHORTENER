@@ -94,7 +94,7 @@ const Login = () => {
           <Form>
             <div className="form-group">
               <label htmlFor="email">Email</label>
-              <Field name="email" type="text" className="form-control" />
+              <Field id="email" name="email" type="text" className="form-control" />
               <ErrorMessage
                 name="email"
                 component="div"
@@ -104,7 +104,7 @@ const Login = () => {
 
             <div className="form-group">
               <label htmlFor="password">Password</label>
-              <Field name="password" type="password" className="form-control" />
+              <Field id="password" name="password" type="password" className="form-control" />
               <ErrorMessage
                 name="password"
                 component="div"

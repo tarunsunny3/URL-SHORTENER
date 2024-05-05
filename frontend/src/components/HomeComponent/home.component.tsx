@@ -61,7 +61,10 @@ const Home: React.FC = () => {
   };
 
   const handleLongURLOnchange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUrlError("");
+    if(event.target.value.length === 0){
+      setUrlError("Please enter the URL")
+    }
+    setUrlError("")
     setLongUrl(event.target.value)
   }
 
