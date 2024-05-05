@@ -29,6 +29,10 @@ const Home: React.FC = () => {
 
   const generateShortURL = async () => {
     try {
+      if(longUrl.length == 0){
+        setUrlError("Please enter the URL")
+        return
+      }
       setUrlError("")
       setIsLoading(true)
       const result = await UrlService.createShortURL(longUrl, userId);
@@ -60,10 +64,22 @@ const Home: React.FC = () => {
     }
   };
 
-  const handleLongURLOnchange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if(event.target.value.length === 0){
-      setUrlError("Please enter the URL")
+  const visitURL = () => {
+    if(!shortUrl || shortUrl.length === 0){
+      setUrlError("Please generate a Short URL first")
+      return
     }
+    setUrlError("");
+    window.open(shortUrl)
+  }
+  const copyToClipboard = () => {
+    if(!shortUrl || shortUrl.length === 0){
+      setUrlError("Please generate a Short URL first")
+      return
+    }
+    setUrlError("");
+  }
+  const handleLongURLOnchange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUrlError("")
     setLongUrl(event.target.value)
   }
@@ -97,11 +113,11 @@ const Home: React.FC = () => {
           )
         } */}
         <div className={styles.hcontainer}>
-          <button className="btn-spl" onClick={() => window.open(shortUrl)}>Visit URL</button>
+          <button className="btn-spl" onClick={visitURL}>Visit URL</button>
           <button className="btn-spl" onClick={generateShortURL}>Generate Short URL</button>
           {/* <button className="btn-spl" onClick={handleShowQRCode}>QR Code</button> */}
           <CopyToClipboard text={shortUrl}>
-            <button className="btn-spl">Copy to Clipboard</button>
+            <button onClick={copyToClipboard} className="btn-spl">Copy to Clipboard</button>
           </CopyToClipboard>
         </div>
 
